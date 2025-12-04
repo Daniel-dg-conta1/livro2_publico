@@ -1,446 +1,333 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Teoria da Usinagem - Plataforma Integral</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teoria da Usinagem — Plataforma Integral (TOC Estruturado)</title>
 
-    <!-- Tailwind + fonts + icons (preservado) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Lora:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
 
-    <!-- PDF.js for client PDF rendering -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
-    <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js';</script>
-
-    <!-- Tesseract.js for OCR (fallback for scans) -->
-    <script src="https://unpkg.com/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
-
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .serif { font-family: 'Lora', serif; }
-        .app-grid { display: grid; grid-template-columns: 280px 1fr; height: 100vh; overflow: hidden; }
-        .content-body h2 { font-size: 1.8rem; color: #0f172a; font-weight: 700; margin-bottom: 1.5rem; margin-top: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-        .content-body h3 { font-size: 1.4rem; color: #1e40af; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; }
-        .content-body p { margin-bottom: 1.5rem; line-height: 1.8; font-size: 1.05rem; text-align: justify; color: #374151; }
-        .formula-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 2rem 0; }
-        .calc-panel { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1.5rem; border-radius: 0.5rem; margin-top: 1rem; }
-        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #f1f5f9; } ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .tab-btn.active { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: 600; }
-        @media (max-width: 768px) { .app-grid { grid-template-columns: 1fr; } .sidebar { display: none; } .sidebar.open { display: flex; position: absolute; z-index: 50; width: 100%; height: 100%; } }
-        #pdf-viewer { background: #fff; border: 1px solid #e6e9ee; padding: 8px; border-radius: 8px; max-height: 70vh; overflow:auto; }
-        #pdf-pages canvas { display:block; margin: 8px auto; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .small-muted { font-size: 12px; color: #6b7280; }
-    </style>
+  <style>
+    body { font-family: 'Inter', sans-serif; background:#f8fafc; color:#334155; }
+    .serif { font-family: 'Lora', serif; }
+    .app-grid { display:grid; grid-template-columns:320px 1fr; height:100vh; overflow:hidden; }
+    .sidebar { background:#fff; border-right:1px solid #e6e9ee; display:flex; flex-direction:column; }
+    .toc-item { cursor:pointer; user-select:none; }
+    .collapse { display:none; }
+    .toc-scroll { overflow:auto; padding:0.5rem 0.75rem; }
+    .content-body h1 { font-size:2.25rem; }
+    .content-body p { line-height:1.8; }
+    @media (max-width:820px) { .app-grid { grid-template-columns: 1fr; } .sidebar { display:none; } .sidebar.open { display:flex; position:absolute; z-index:50; width:100%; height:100%; } }
+    .small-muted { font-size:12px; color:#6b7280; }
+  </style>
 </head>
 <body>
-<div class="app-grid">
+  <div class="app-grid">
+
     <!-- SIDEBAR -->
-    <aside id="sidebar" class="sidebar bg-white border-r border-slate-200 flex-col h-full transition-all duration-300 hidden md:flex">
-        <div class="p-5 border-b border-slate-100 bg-slate-900 text-white shrink-0">
-            <h1 class="font-bold text-lg leading-tight">Teoria da Usinagem</h1>
-            <p class="text-[10px] opacity-70 mt-1 uppercase tracking-widest">Base de Conhecimento Integral</p>
+    <aside id="sidebar" class="sidebar">
+      <div class="p-4 border-b bg-slate-900 text-white">
+        <h2 class="serif font-bold text-lg">Teoria da Usinagem</h2>
+        <div class="text-xs opacity-70 mt-1">Estrutura completa (mapa do livro)</div>
+      </div>
+
+      <div class="p-3 border-b">
+        <div class="relative">
+          <i class="fas fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+          <input id="search-input" onkeyup="app.search()" placeholder="Buscar..." class="pl-8 pr-3 py-2 w-full rounded border bg-slate-50 text-sm" />
         </div>
+      </div>
 
-        <div class="p-3 border-b border-slate-100">
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
-                <input type="text" id="search-input" onkeyup="app.search()" placeholder="Buscar conceito..." class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 transition-colors">
-            </div>
+      <div class="flex-1 toc-scroll" id="toc-root">
+        <!-- TOC injected by JS -->
+      </div>
+
+      <div class="p-3 border-t bg-slate-50">
+        <div class="flex gap-2">
+          <label class="flex-1 cursor-pointer bg-white border rounded p-2 text-xs text-slate-700 text-center">
+            <input id="file-input" type="file" accept="application/json,application/pdf" style="display:none" onchange="app.handleFile(this.files)" />
+            <i class="fas fa-file-import mr-2"></i> Importar chapters.json / PDF
+          </label>
+          <button onclick="app.toggleSidebarMobile()" class="px-3 py-2 border rounded text-xs"><i class="fas fa-bars"></i></button>
         </div>
-
-        <nav class="flex-1 overflow-y-auto p-2 space-y-1" id="nav-list"></nav>
-
-        <div class="p-3 bg-slate-50 border-t border-slate-200 grid grid-cols-1 gap-2 shrink-0">
-            <div class="flex gap-2">
-                <label class="flex-1 cursor-pointer bg-white border border-slate-200 rounded p-2 text-xs text-slate-700 text-center">
-                    <input id="pdf-file-input" type="file" accept="application/pdf" style="display:none" onchange="app.handleLocalPDF(this.files)" />
-                    <i class="fas fa-file-pdf mr-2 text-red-600"></i> Importar Livro (PDF)
-                </label>
-                <button onclick="app.openDefaultPDF()" class="px-3 py-2 bg-white border border-slate-200 rounded text-xs hover:bg-slate-100"><i class="fas fa-file-alt mr-1"></i> Abrir PDF</button>
-            </div>
-
-            <div class="flex gap-2 mt-2">
-                <button onclick="app.viewMode('tutor')" class="flex-1 flex items-center justify-center p-2 bg-white border border-slate-200 rounded hover:bg-blue-50 hover:text-blue-600 transition"><i class="fas fa-robot mr-2"></i> Tutor IA</button>
-                <button onclick="app.viewMode('quiz')" class="flex-1 flex items-center justify-center p-2 bg-white border border-slate-200 rounded hover:bg-green-50 hover:text-green-600 transition"><i class="fas fa-clipboard-check mr-2"></i> Simulado</button>
-            </div>
-        </div>
+        <div class="mt-2 text-xs small-muted">Sugestão: gere chapters.json com OCR (recomendo GitHub Action ou rodar localmente).</div>
+      </div>
     </aside>
 
-    <!-- MAIN -->
-    <main class="flex flex-col h-full relative overflow-hidden bg-white">
-        <header class="md:hidden flex items-center justify-between p-4 border-b border-slate-200 bg-white z-20">
-            <span class="font-bold text-slate-800">Teoria da Usinagem</span>
-            <button onclick="app.toggleSidebar()" class="text-slate-600"><i class="fas fa-bars"></i></button>
-        </header>
+    <!-- MAIN CONTENT -->
+    <main class="flex flex-col bg-white">
+      <header class="md:hidden flex items-center justify-between p-3 border-b">
+        <div class="font-bold">Teoria da Usinagem</div>
+        <button onclick="app.toggleSidebarMobile()" class="text-slate-600"><i class="fas fa-bars"></i></button>
+      </header>
 
-        <div id="toolbar" class="px-8 py-4 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
-            <div id="breadcrumbs" class="text-sm text-slate-500"><span class="cursor-pointer hover:text-blue-600" onclick="app.viewMode('home')">Início</span></div>
-            <div class="flex gap-2">
-                <button onclick="app.adjustFontSize(-1)" class="w-8 h-8 rounded hover:bg-slate-100 text-slate-500" title="Diminuir Fonte">A-</button>
-                <button onclick="app.adjustFontSize(1)" class="w-8 h-8 rounded hover:bg-slate-100 text-slate-500" title="Aumentar Fonte">A+</button>
+      <div id="toolbar" class="flex items-center justify-between p-4 border-b">
+        <div id="breadcrumbs" class="text-sm text-slate-500">Início</div>
+        <div class="flex items-center gap-2">
+          <button onclick="app.adjustFontSize(-1)" class="px-2 py-1 border rounded">A-</button>
+          <button onclick="app.adjustFontSize(1)" class="px-2 py-1 border rounded">A+</button>
+        </div>
+      </div>
+
+      <div id="content-area" class="flex-1 overflow-auto p-8">
+        <!-- Home content -->
+        <div id="home" class="max-w-4xl mx-auto text-center">
+          <i class="fas fa-book-reader text-6xl text-blue-200 mb-4"></i>
+          <h1 class="serif text-4xl font-bold text-slate-900 mb-3">Plataforma de Estudo Integral</h1>
+          <p class="text-slate-600 mb-6">A estrutura completa do livro foi carregada no TOC lateral. Clique em qualquer item para visualizar o conteúdo (se disponível) ou importe um <strong>chapters.json</strong> para preencher todo o conteúdo automaticamente.</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 bg-white border rounded">
+              <h3 class="font-bold">Abrir PDF / Importar JSON</h3>
+              <p class="small-muted mt-2">Clique em "Importar chapters.json / PDF" na barra lateral para carregar o conteúdo.</p>
             </div>
+            <div class="p-4 bg-white border rounded">
+              <h3 class="font-bold">Tutor & Simulado</h3>
+              <p class="small-muted mt-2">Use o tutor para perguntar sobre o conteúdo e o simulado para testar seu conhecimento.</p>
+            </div>
+          </div>
         </div>
-
-        <div id="content-area" class="flex-1 overflow-y-auto p-8 md:px-16 md:py-10 scroll-smooth">
-            <!-- Inicial: Home -->
-        </div>
+      </div>
     </main>
-</div>
+  </div>
 
-<script>
-    // Minimal fallback DB (will be replaced after import)
-    const db = {
-        chapters: [
-            { id: "c1", title: "1. Introdução e Conceitos", sections: [{ subtitle: "Definição de Usinagem", text: "A usinagem é definida..." }] },
-            { id: "c2", title: "2. Geometria da Ferramenta", sections: [{ subtitle: "O Conceito de Cunha", text: "Toda ferramenta..." }] }
-        ],
-        quiz: [
-            { q: "Qual o parâmetro que mais influencia a vida da ferramenta segundo Taylor?", a: ["Avanço", "Profundidade", "Velocidade de Corte", "Raio de Ponta"], correct: 2, info: "A relação é exponencial..." }
-        ]
-    };
-</script>
+  <script>
+    // --- 1. Estrutura solicitada (TOC) baseada no mind-map enviado
+    const tocStructure = [
+      { id: "ch1", title: "1. Introdução e a Teoria da Usinagem", children: [
+        { id:"ch1.1", title:"1.1 Princípios gerais de usinagem" },
+        { id:"ch1.2", title:"1.2 Grandezas físicas no processo de corte" }
+      ]},
+      { id: "ch2", title: "2. Geometria da Ferramenta de Corte", children: [
+        { id:"ch2.1", title:"2.1 Definições" },
+        { id:"ch2.2", title:"2.2 Sistema de referência" },
+        { id:"ch2.3", title:"2.3 Funções e influência de principais ângulos" },
+        { id:"ch2.4", title:"2.4 Outros atributos da cunha cortante" }
+      ]},
+      { id: "ch3", title: "3. Formação do Cavaco", children: [
+        { id:"ch3.1", title:"3.1 Mecanismo de formação" },
+        { id:"ch3.2", title:"3.2 Tipos de cavaco" },
+        { id:"ch3.3", title:"3.3 Aresta postiça de corte (BUE)" }
+      ]},
+      { id: "ch4", title: "4. Forças e Potencial de Usinagem", children: [
+        { id:"ch4.1", title:"4.1 Decomposição vetorial das forças" },
+        { id:"ch4.2", title:"4.2 Equações empíricas (Kienzle etc.)" },
+        { id:"ch4.3", title:"4.3 Potência e energia de corte" },
+        { id:"ch4.4", title:"4.4 Faixa de trabalho e limites" }
+      ]},
+      { id: "ch5", title: "5. Temperatura no Processo de Usinagem", children: [
+        { id:"ch5.1", title:"5.1 Geração de calor" },
+        { id:"ch5.2", title:"5.2 Distribuição do calor" },
+        { id:"ch5.3", title:"5.3 Medição e controle de temperatura" }
+      ]},
+      { id: "ch6", title: "6. Fluidos de Corte", children: [
+        { id:"ch6.1", title:"6.1 Funções dos fluidos" },
+        { id:"ch6.2", title:"6.2 Tipos: óleos, emulsões, MQL, sintéticos" },
+        { id:"ch6.3", title:"6.3 Métodos de aplicação" }
+      ]},
+      { id: "ch7", title: "7. Materiais para Ferramentas de Corte", children: [
+        { id:"ch7.1", title:"7.1 Aço rápido (HSS)" },
+        { id:"ch7.2", title:"7.2 Metal duro (carbonetos)" },
+        { id:"ch7.3", title:"7.3 Cerâmicas" },
+        { id:"ch7.4", title:"7.4 Superduros (CBN/PCD)" },
+        { id:"ch7.5", title:"7.5 Revestimentos e tratamentos" }
+      ]},
+      { id: "ch8", title: "8. Vida da Ferramenta — Desgaste e Falhas", children: [
+        { id:"ch8.1", title:"8.1 Mecanismos de desgaste: adesão, abrasão, difusão" },
+        { id:"ch8.2", title:"8.2 Critérios de fim de vida (VB, cratera)" },
+        { id:"ch8.3", title:"8.3 Equação de Taylor e otimização" }
+      ]},
+      { id: "ch9", title: "9. Integridade Superficial", children: [
+        { id:"ch9.1", title:"9.1 Rugosidade vs. integridade" },
+        { id:"ch9.2", title:"9.2 Tensões residuais e alterações microestruturais" },
+        { id:"ch9.3", title:"9.3 Ensaios e medição" }
+      ]},
+      { id: "ch10", title: "10. Condições Econômicas de Corte", children: [
+        { id:"ch10.1", title:"10.1 Cálculo de velocidade ótima" },
+        { id:"ch10.2", title:"10.2 Custo por peça e trade-offs" },
+        { id:"ch10.3", title:"10.3 Intervalos de eficiência" }
+      ]},
+      { id: "ch11", title: "11. Usinagem por Abrasão", children: [
+        { id:"ch11.1", title:"11.1 Processos e ferramentas abrasivas" },
+        { id:"ch11.2", title:"11.2 Materiais e aplicações" },
+        { id:"ch11.3", title:"11.3 Controle de processo" }
+      ]},
+      { id: "ch12", title: "12. Aspectos Tecnológicos e Recomendações", children: [
+        { id:"ch12.1", title:"12.1 Aços e ligas" },
+        { id:"ch12.2", title:"12.2 Fixação e parâmetros de usinagem" },
+        { id:"ch12.3", title:"12.3 Recomendações práticas" }
+      ]}
+    ];
 
-<script>
-const app = {
-    state: { currentMode: 'home', fontSize: 16, pdfDoc: null, defaultPdfUrl: null, ocrRunning: false },
+    // --- 2. db: conteúdo (inicial vazio). Você pode importar chapters.json para preencher.
+    let db = { chapters: [], quiz: [] };
 
-    init() { this.renderSidebar(); this.viewMode('home'); },
+    // --- 3. Renders
+    const tocRoot = document.getElementById('toc-root');
+    function buildTOC(struct) {
+      tocRoot.innerHTML = '';
+      struct.forEach(node => {
+        const nodeEl = document.createElement('div');
+        nodeEl.className = 'mb-1';
+        const head = document.createElement('div');
+        head.className = 'flex items-center justify-between p-2 rounded hover:bg-slate-50 toc-item';
+        head.innerHTML = `<div class="flex items-center gap-2"><i class="fas fa-chevron-right text-xs mr-1"></i><div><strong>${node.title}</strong></div></div>`;
+        head.onclick = () => toggleNode(node.id);
+        nodeEl.appendChild(head);
 
-    renderSidebar() {
-        const nav = document.getElementById('nav-list');
-        nav.innerHTML = db.chapters.map(c => `
-            <button onclick="app.loadChapter('${c.id}')" class="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded transition flex items-center group">
-                <span class="w-6 h-6 rounded bg-slate-100 text-slate-500 flex items-center justify-center text-xs mr-2">${c.id.replace('c','')}</span>
-                <span class="truncate">${c.title.replace(/^\d+\.\s*/,'')}</span>
-            </button>
-        `).join('');
-    },
+        const childrenWrap = document.createElement('div');
+        childrenWrap.className = 'ml-4 mt-2 collapse';
+        childrenWrap.id = `wrap-${node.id}`;
 
-    viewMode(mode) {
-        this.state.currentMode = mode;
-        const container = document.getElementById('content-area');
-        const breadcrumbs = document.getElementById('breadcrumbs');
-
-        if (mode === 'home') {
-            breadcrumbs.innerHTML = `<span class="font-bold text-slate-800">Início</span>`;
-            container.innerHTML = `
-                <div class="max-w-4xl mx-auto text-center py-10">
-                    <i class="fas fa-book-reader text-6xl text-blue-200 mb-6"></i>
-                    <h1 class="text-4xl font-bold text-slate-900 mb-4 serif">Plataforma de Estudo Integral</h1>
-                    <p class="text-lg text-slate-600 mb-8">Baseada na obra referência. Você pode abrir o PDF do livro ou importá-lo para extrair capítulos automaticamente.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                        <div onclick="app.openDefaultPDF()" class="p-6 bg-white border border-slate-200 rounded-xl hover:shadow-lg cursor-pointer transition">
-                            <h3 class="font-bold text-lg text-blue-800 mb-2">Abrir PDF do Livro</h3>
-                            <p class="text-slate-500 text-sm">Visualize o PDF integrado ao site (requer upload ou URL configurada).</p>
-                        </div>
-                        <div onclick="document.getElementById('pdf-file-input').click()" class="p-6 bg-white border border-slate-200 rounded-xl hover:shadow-lg cursor-pointer transition">
-                            <h3 class="font-bold text-lg text-green-700 mb-2">Importar e Extrair Conteúdo</h3>
-                            <p class="text-slate-500 text-sm">Carregue o PDF localmente. O sistema tentará extrair o texto e estruturar capítulos automaticamente (OCR se necessário).</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        } else if (mode === 'tutor') {
-            breadcrumbs.innerHTML = `<span onclick="app.viewMode('home')" class="cursor-pointer">Início</span> > <span>Tutor IA</span>`;
-            this.renderTutor(document.getElementById('content-area'));
-        } else if (mode === 'quiz') {
-            breadcrumbs.innerHTML = `<span onclick="app.viewMode('home')" class="cursor-pointer">Início</span> > <span>Simulado</span>`;
-            this.renderQuiz(document.getElementById('content-area'));
+        if (node.children && node.children.length) {
+          node.children.forEach(child => {
+            const c = document.createElement('div');
+            c.className = 'p-1 rounded hover:bg-slate-50 text-sm';
+            c.innerHTML = `<span class="text-slate-700">${child.title}</span>`;
+            c.onclick = (ev) => { ev.stopPropagation(); onTocClick(child); };
+            childrenWrap.appendChild(c);
+          });
         }
-        document.getElementById('sidebar').classList.remove('open');
-    },
 
-    loadChapter(id) {
-        const chapter = db.chapters.find(c => c.id === id);
-        if(!chapter) return alert('Capítulo não encontrado.');
-        const container = document.getElementById('content-area');
-        document.getElementById('breadcrumbs').innerHTML = `<span onclick="app.viewMode('home')" class="cursor-pointer hover:underline">Início</span> > <span class="font-bold text-slate-800">${chapter.title}</span>`;
-        let html = `
-            <div class="content-body max-w-4xl mx-auto animate-fade-in" style="font-size: ${this.state.fontSize}px">
-                <h1 class="serif text-4xl font-bold text-slate-900 mb-2">${chapter.title}</h1>
-                <div class="h-1 w-20 bg-blue-600 mb-8"></div>
-                <div class="prose">
-                    ${chapter.sections.map(sec => `<h3>${sec.subtitle}</h3><p>${sec.text}</p>`).join('')}
-                </div>
-            </div>
-        `;
-        container.innerHTML = html;
-        container.scrollTop = 0;
-    },
-
-    adjustFontSize(delta) { this.state.fontSize += delta; const content = document.querySelector('.content-body'); if(content) content.style.fontSize = `${this.state.fontSize}px`; },
-
-    toggleSidebar() { const s = document.getElementById('sidebar'); s.classList.toggle('hidden'); s.classList.toggle('absolute'); s.classList.toggle('z-50'); s.classList.toggle('w-full'); s.classList.toggle('bg-white'); },
-
-    search() {
-        const query = document.getElementById('search-input').value.toLowerCase();
-        const nav = document.getElementById('nav-list');
-        if(!query) { this.renderSidebar(); return; }
-        const results = db.chapters.filter(c => c.title.toLowerCase().includes(query) || c.sections.some(s => s.text.toLowerCase().includes(query) || s.subtitle.toLowerCase().includes(query)));
-        nav.innerHTML = results.map(c => `
-            <button onclick="app.loadChapter('${c.id}')" class="w-full text-left px-3 py-2 text-sm text-slate-600 bg-yellow-50 rounded mb-1 border border-yellow-100">
-                <span class="font-bold text-xs block text-yellow-700">Resultado em:</span>
-                <span class="truncate font-semibold">${c.title}</span>
-            </button>
-        `).join('');
-        if(results.length === 0) nav.innerHTML = `<div class="p-4 text-xs text-center text-slate-400">Nenhum resultado encontrado.</div>`;
-    },
-
-    openDefaultPDF() { if(this.state.defaultPdfUrl) { this.showPdfViewer(this.state.defaultPdfUrl); } else { this.viewPdfImportUI(); } },
-
-    viewPdfImportUI() {
-        const container = document.getElementById('content-area');
-        document.getElementById('breadcrumbs').innerHTML = `<span onclick="app.viewMode('home')" class="cursor-pointer">Início</span> > <span>Visualizador PDF</span>`;
-        container.innerHTML = `
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-2xl font-bold mb-4">Visualizador de PDF & Importador</h2>
-                <div class="mb-4 small-muted">Use "Importar Livro (PDF)" na barra lateral ou selecione um arquivo abaixo.</div>
-
-                <div class="bg-white p-4 rounded shadow-sm mb-4">
-                    <input id="pdf-url" class="w-full border rounded p-2 mb-2" placeholder="Colar URL do PDF (opcional)"/>
-                    <div class="flex gap-2">
-                        <button onclick="app.handleOpenUrlPDF()" class="px-4 py-2 bg-blue-600 text-white rounded">Abrir URL</button>
-                        <button onclick="document.getElementById('pdf-file-input').click()" class="px-4 py-2 border rounded">Selecionar Arquivo</button>
-                        <button onclick="app.startAutoExtract()" class="px-4 py-2 bg-green-600 text-white rounded">Extrair Texto / Tentar estruturar capítulos</button>
-                    </div>
-                </div>
-
-                <div id="pdf-viewer" class="mb-6">
-                    <div id="pdf-controls" class="flex items-center gap-3 mb-2 small-muted">
-                        <span id="pdf-status">Nenhum PDF carregado.</span>
-                        <button onclick="app.clearPdfViewer()" class="ml-auto text-xs px-3 py-1 border rounded">Limpar</button>
-                    </div>
-                    <div id="pdf-pages"></div>
-                </div>
-
-                <div id="extraction-log" class="bg-slate-50 p-3 rounded small-muted"></div>
-            </div>
-        `;
-    },
-
-    handleLocalPDF(files) {
-        if(!files || files.length === 0) return;
-        const file = files[0];
-        const url = URL.createObjectURL(file);
-        this.state.loadedLocalPdf = file;
-        this.showPdfViewer(url);
-    },
-
-    handleOpenUrlPDF() {
-        const url = document.getElementById('pdf-url').value.trim();
-        if(!url) return alert('Cole uma URL de PDF ou use importar arquivo.');
-        this.showPdfViewer(url);
-    },
-
-    async showPdfViewer(url) {
-        const viewer = document.getElementById('pdf-pages');
-        const status = document.getElementById('pdf-status') || null;
-        if(status) status.textContent = 'Carregando PDF...';
-        viewer.innerHTML = '';
-        try {
-            const loadingTask = pdfjsLib.getDocument({ url });
-            const pdf = await loadingTask.promise;
-            this.state.pdfDoc = pdf;
-            if(status) status.textContent = `PDF carregado: ${pdf.numPages} páginas.`;
-            for(let p=1; p<=pdf.numPages; p++){
-                const page = await pdf.getPage(p);
-                const viewport = page.getViewport({ scale: 1.4 });
-                const canvas = document.createElement('canvas');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-                const ctx = canvas.getContext('2d');
-                await page.render({ canvasContext: ctx, viewport }).promise;
-                canvas.setAttribute('data-page', p);
-                viewer.appendChild(canvas);
-            }
-            const controls = document.getElementById('pdf-controls');
-            if(controls) {
-                controls.querySelectorAll('.pdf-download').forEach(n=>n.remove());
-                const a = document.createElement('a');
-                a.href = url; a.target='_blank'; a.className='pdf-download small-muted ml-2';
-                a.innerHTML = '<i class="fas fa-download mr-1"></i> Abrir/baixar PDF';
-                controls.appendChild(a);
-            }
-            document.getElementById('content-area').scrollTop = 0;
-        } catch(e){
-            console.error(e);
-            if(status) status.textContent = 'Erro carregando PDF. Verifique a URL/arquivo.';
-            alert('Falha ao carregar PDF: ' + e.message);
-        }
-    },
-
-    clearPdfViewer() { document.getElementById('pdf-pages').innerHTML = ''; const s = document.getElementById('pdf-status'); if(s) s.textContent = 'Nenhum PDF carregado.'; this.state.pdfDoc = null; },
-
-    async startAutoExtract() {
-        const pagesContainer = document.getElementById('pdf-pages');
-        if(!pagesContainer || pagesContainer.children.length === 0) return alert('Carregue um PDF primeiro (usar "Abrir PDF" ou importar).');
-        const log = document.getElementById('extraction-log');
-        log.innerHTML = 'Iniciando extração...<br/>';
-        this.state.ocrRunning = true;
-        const extractedPagesText = [];
-        for(const canvas of Array.from(pagesContainer.querySelectorAll('canvas'))){
-            if(!this.state.ocrRunning) break;
-            const pageNum = canvas.getAttribute('data-page');
-            log.innerHTML += `Processando página ${pageNum}...<br/>`;
-            let pageText = '';
-            try {
-                if(this.state.pdfDoc){
-                    const page = await this.state.pdfDoc.getPage(parseInt(pageNum));
-                    const textContent = await page.getTextContent();
-                    const t = textContent.items.map(i => i.str).join(' ');
-                    if(t.trim().length > 20){
-                        pageText = t;
-                        log.innerHTML += `→ texto extraído com pdf.js (camada de texto) <br/>`;
-                    }
-                }
-            } catch(err){
-                console.warn('Erro extrair textContent', err);
-            }
-            if(!pageText || pageText.trim().length < 20){
-                log.innerHTML += `→ sem camada de texto, rodando OCR (Tesseract) na página ${pageNum}...<br/>`;
-                try {
-                    const dataUrl = canvas.toDataURL('image/png');
-                    const worker = Tesseract.createWorker({ logger: m => { } });
-                    await worker.load();
-                    await worker.loadLanguage('por');
-                    await worker.initialize('por');
-                    const { data: { text } } = await worker.recognize(dataUrl);
-                    await worker.terminate();
-                    pageText = text;
-                    log.innerHTML += `→ OCR finalizado (caracteres: ${pageText.length})<br/>`;
-                } catch(ocrErr){
-                    console.error('OCR falhou', ocrErr);
-                    log.innerHTML += `→ OCR falhou na página ${pageNum}: ${ocrErr.message}<br/>`;
-                }
-            }
-            extractedPagesText.push({ page: pageNum, text: pageText || '' });
-            await new Promise(res => setTimeout(res, 200));
-        }
-        log.innerHTML += `<strong>Compilando e tentando estruturar capítulos...</strong><br/>`;
-        const fullText = extractedPagesText.map(p=>p.text).join('\n\n');
-        const lines = fullText.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-        const candidateIndices = [];
-        for(let i=0;i<lines.length;i++){
-            const l = lines[i];
-            if(/^(cap[ií]tulo|capitulo)\b/i.test(l) || /^\d+\.\s+[A-ZÀ-Ú]/.test(l) || /^\d+\s+[A-ZÀ-Ú]/.test(l)){
-                candidateIndices.push({ index:i, text: l });
-            }
-        }
-        const chapters = [];
-        if(candidateIndices.length > 0) {
-            for(let i=0;i<candidateIndices.length;i++){
-                const start = candidateIndices[i].index;
-                const end = (i < candidateIndices.length-1) ? candidateIndices[i+1].index : lines.length;
-                const title = lines[start].replace(/^(cap[ií]tulo\s*)/i,'').replace(/^\d+\.\s*/,'').trim();
-                const body = lines.slice(start+1, end).join(' ');
-                chapters.push({ id:`c${i+1}`, title: `${i+1}. ${title || 'Capítulo ' + (i+1)}`, sections: [{ subtitle: title || 'Conteúdo', text: body }] });
-            }
-            log.innerHTML += `Capítulos detectados automaticamente: ${chapters.length}<br/>`;
-        } else {
-            log.innerHTML += `Nenhum título claro detectado — criando capítulos por grupos de páginas (fallback).<br/>`;
-            const pagesPerChapter = 2;
-            let idCounter = 1;
-            for(let i=0;i<extractedPagesText.length;i+=pagesPerChapter){
-                const seg = extractedPagesText.slice(i, i+pagesPerChapter);
-                const text = seg.map(s=>s.text).join('\n\n');
-                chapters.push({ id:`c${idCounter}`, title: `${idCounter}. Capítulo extraído`, sections: [{ subtitle: `Páginas ${seg[0].page} - ${seg[seg.length-1].page}`, text: text }] });
-                idCounter++;
-            }
-        }
-        if(chapters.length > 0){
-            db.chapters = chapters;
-            this.renderSidebar();
-            log.innerHTML += `<strong>db.chapters atualizado com ${chapters.length} capítulos.</strong><br/>`;
-        } else {
-            log.innerHTML += `Não foi possível estruturar capítulos automaticamente.<br/>`;
-        }
-        this.state.ocrRunning = false;
-        alert('Extração concluída. Revise os capítulos no menu lateral.');
-    },
-
-    renderTutor(container) {
-        container.innerHTML = `
-            <div class="max-w-2xl mx-auto h-full flex flex-col">
-                <div class="bg-blue-600 text-white p-4 rounded-t-lg flex items-center">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center mr-3"><i class="fas fa-robot"></i></div>
-                    <div><h3 class="font-bold">Tutor Virtual de Usinagem</h3><p class="text-xs text-blue-100">Pergunte sobre qualquer capítulo</p></div>
-                </div>
-                <div id="chat-box" class="flex-1 bg-slate-50 border-x border-slate-200 p-4 overflow-y-auto space-y-4">
-                    <div class="flex"><div class="bg-white border p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] text-sm">Olá! Tenho acesso ao conteúdo carregado. Pergunte por temas ou termos.</div></div>
-                </div>
-                <div class="p-4 bg-white border border-slate-200 rounded-b-lg flex gap-2">
-                    <input type="text" id="chat-input" class="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Digite sua dúvida...">
-                    <button onclick="app.handleChat()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Enviar</button>
-                </div>
-            </div>
-        `;
-    },
-
-    handleChat() {
-        const input = document.getElementById('chat-input');
-        const box = document.getElementById('chat-box');
-        const text = input.value.trim().toLowerCase(); if(!text) return;
-        box.innerHTML += `<div class="flex justify-end"><div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm max-w-[85%] text-sm">${input.value}</div></div>`;
-        input.value = ''; box.scrollTop = box.scrollHeight;
-        setTimeout(()=> {
-            let answer = "Desculpe, não encontrei essa informação específica nos meus registros dos capítulos.";
-            for(const ch of db.chapters){
-                for(const sec of ch.sections){
-                    if(sec.text.toLowerCase().includes(text) || (sec.subtitle && sec.subtitle.toLowerCase().includes(text))){
-                        answer = `Encontrei no <strong>${ch.title}</strong>:<br><br>${sec.text.slice(0,800)}...`;
-                        break;
-                    }
-                }
-                if(answer.startsWith('Encontrei')) break;
-            }
-            box.innerHTML += `<div class="flex"><div class="bg-white border p-3 rounded-lg rounded-tl-none shadow-sm max-w-[85%] text-sm">${answer}</div></div>`;
-            box.scrollTop = box.scrollHeight;
-        }, 500);
-    },
-
-    renderQuiz(container) {
-        container.innerHTML = `
-            <div class="max-w-3xl mx-auto pt-10">
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold text-slate-800 mb-2">Simulado Geral</h2>
-                    <p class="text-slate-500">Questões selecionadas do banco.</p>
-                </div>
-                <div class="space-y-6">
-                    ${db.quiz.map((q, i) => `
-                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm quiz-item">
-                            <h3 class="font-bold text-lg mb-4 text-slate-800">${i+1}. ${q.q}</h3>
-                            <div class="space-y-2">
-                                ${q.a.map((opt, oi) => `
-                                    <button onclick="app.checkAnswer(this, ${i}, ${oi})" class="w-full text-left p-3 rounded border hover:bg-slate-50 transition text-sm text-slate-600">${opt}</button>
-                                `).join('')}
-                            </div>
-                            <div id="feedback-${i}" class="hidden mt-4 p-3 bg-blue-50 text-blue-800 text-sm rounded">
-                                <strong>Explicação:</strong> ${q.info}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    },
-
-    checkAnswer(btn, qIdx, optIdx) {
-        const q = db.quiz[qIdx];
-        const parent = btn.parentElement;
-        const feedback = document.getElementById(`feedback-${qIdx}`);
-        Array.from(parent.children).forEach(b => { b.disabled = true; if(b.textContent === q.a[q.correct]) b.classList.add('bg-green-100','border-green-500','text-green-800','font-bold'); });
-        if(optIdx === q.correct) { btn.innerHTML += ' <i class="fas fa-check float-right"></i>'; } else { btn.classList.add('bg-red-100','border-red-500','text-red-800'); btn.innerHTML += ' <i class="fas fa-times float-right"></i>'; }
-        feedback.classList.remove('hidden');
+        nodeEl.appendChild(childrenWrap);
+        tocRoot.appendChild(nodeEl);
+      });
     }
-};
-window.addEventListener('load', () => app.init());
-</script>
 
-<style>
-    @keyframes fadeIn { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform: translateY(0);} }
-    .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-</style>
+    function toggleNode(id) {
+      const wrap = document.getElementById('wrap-' + id);
+      if(!wrap) return;
+      const icon = wrap.previousSibling.querySelector('i.fas');
+      if (wrap.classList.contains('collapse')) { wrap.classList.remove('collapse'); if(icon) icon.className='fas fa-chevron-down text-xs mr-1'; }
+      else { wrap.classList.add('collapse'); if(icon) icon.className='fas fa-chevron-right text-xs mr-1'; }
+    }
+
+    // when toc child clicked: try to load content from db.chapters by matching title approx
+    function onTocClick(node) {
+      const title = node.title;
+      // search in db.chapters - match by startsWith number or by subtitle
+      const found = db.chapters.find(c => (c.title && title.replace(/^\d+\.\s*/,'').toLowerCase().includes(c.title.replace(/^\d+\.\s*/,'').toLowerCase())) || c.id === node.id);
+      // better: try to match by id if chapters have id same as toc (we will try multiple heuristics)
+      let chapter = null;
+      if(!found) {
+        chapter = db.chapters.find(ch => ch.title && ch.title.toLowerCase().includes(title.toLowerCase()));
+      } else chapter = found;
+      renderContent(node.title, chapter);
+    }
+
+    function renderContent(displayTitle, chapter=null) {
+      const area = document.getElementById('content-area');
+      document.getElementById('breadcrumbs').innerText = `Início / ${displayTitle}`;
+      if(!chapter) {
+        area.innerHTML = `<div class="max-w-4xl mx-auto"><h1 class="serif text-3xl font-bold mb-4">${displayTitle}</h1>
+          <p class="text-slate-600">Conteúdo ainda não disponível localmente para este tópico. Importe um <code>chapters.json</code> (que contenha o texto do livro) ou gere via OCR. Depois poderá visualizar o texto aqui.</p>
+          <div class="mt-6"><button onclick="document.getElementById('file-input').click()" class="px-4 py-2 bg-blue-600 text-white rounded">Importar chapters.json</button></div></div>`;
+        return;
+      }
+
+      // If chapter exists, show its sections
+      const sectionsHtml = (chapter.sections || []).map(s => `<h3 class="text-xl font-semibold mt-4">${s.subtitle}</h3><p class="mt-2 text-slate-700">${s.text || '<em>(vazio)</em>'}</p>`).join('');
+      area.innerHTML = `<div class="max-w-4xl mx-auto content-body" style="font-size:16px"><h1 class="serif text-3xl font-bold">${chapter.title}</h1><div class="h-1 w-24 bg-blue-600 my-4"></div>${sectionsHtml}</div>`;
+    }
+
+    // search over db.chapters and toc titles
+    window.app = {
+      init() {
+        buildTOC(tocStructure);
+        // load fallback chapters.json if present at /generated/chapters.json
+        fetch('generated/chapters.json').then(r => {
+          if(r.ok) return r.json();
+          throw new Error('no');
+        }).then(json => {
+          db.chapters = json.chapters || [];
+          console.log('Loaded generated/chapters.json -> chapters:', db.chapters.length);
+        }).catch(()=>{/* ignore */});
+      },
+
+      adjustFontSize(d) {
+        const body = document.querySelector('.content-body');
+        if(body) {
+          const size = parseInt(window.getComputedStyle(body).fontSize) + d;
+          body.style.fontSize = size + 'px';
+        }
+      },
+
+      toggleSidebarMobile() {
+        const s = document.getElementById('sidebar');
+        s.classList.toggle('open');
+      },
+
+      handleFile(files) {
+        if(!files || files.length===0) return;
+        const f = files[0];
+        const ext = f.name.split('.').pop().toLowerCase();
+        if(ext === 'json') {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const json = JSON.parse(e.target.result);
+              if(json.chapters && Array.isArray(json.chapters)) {
+                db.chapters = json.chapters;
+                alert('chapters.json importado com ' + db.chapters.length + ' capítulos.');
+              } else {
+                alert('JSON carregado não tem a chave chapters[]. Verifique o formato.');
+              }
+            } catch(err) {
+              alert('JSON inválido: ' + err.message);
+            }
+          };
+          reader.readAsText(f, 'utf-8');
+        } else if (ext === 'pdf') {
+          alert('PDF importado. Para extrair texto automático, use o workflow de OCR (recomendado) ou exporte chapters.json localmente e importe aqui.');
+          // create URL to preview if desired
+          const url = URL.createObjectURL(f);
+          window.open(url, '_blank');
+        } else {
+          alert('Formato não suportado. Envie chapters.json ou PDF.');
+        }
+      },
+
+      search() {
+        const q = document.getElementById('search-input').value.trim().toLowerCase();
+        if(!q) { buildTOC(tocStructure); return; }
+        // search in toc titles first, then chapters contents
+        const results = [];
+        tocStructure.forEach(node => {
+          if(node.title.toLowerCase().includes(q)) results.push({title:node.title, node});
+          node.children && node.children.forEach(child => {
+            if(child.title.toLowerCase().includes(q)) results.push({title:child.title, node:child});
+          });
+        });
+        // also search inside db.chapters text
+        db.chapters.forEach(ch => {
+          if((ch.title && ch.title.toLowerCase().includes(q)) || (ch.sections && ch.sections.some(s => s.text && s.text.toLowerCase().includes(q)))) {
+            results.push({title: ch.title || ch.id, node: { title: ch.title || ch.id, isChapter: true, id: ch.id }});
+          }
+        });
+
+        // render search results in tocRoot
+        tocRoot.innerHTML = '';
+        if(results.length === 0) {
+          tocRoot.innerHTML = '<div class="p-3 text-xs text-slate-400">Nenhum resultado.</div>';
+          return;
+        }
+        results.forEach(r => {
+          const el = document.createElement('div');
+          el.className = 'p-2 hover:bg-slate-50 rounded text-sm';
+          el.innerHTML = `<strong>${r.title}</strong>`;
+          el.onclick = () => {
+            if(r.node.isChapter) renderContent(r.title, db.chapters.find(c => (c.title||'') === r.title));
+            else onTocClick(r.node);
+          };
+          tocRoot.appendChild(el);
+        });
+      }
+
+    };
+
+    window.addEventListener('load', () => app.init());
+  </script>
 </body>
 </html>
