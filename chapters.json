@@ -1,0 +1,128 @@
+{
+  "source": "mindmap: NotebookLM Mind Map",
+  "chapters_count": 13,
+  "chapters": [
+    {
+      "id": "c1",
+      "title": "1. Introdução à Teoria da Usinagem",
+      "sections": [
+        {"subtitle": "1.1. Principais operações de usinagem", "text": ""},
+        {"subtitle": "1.2. Grandezas físicas no processo de corte", "text": ""}
+      ]
+    },
+    {
+      "id": "c2",
+      "title": "2. Geometria da Ferramenta de Corte",
+      "sections": [
+        {"subtitle": "2.1. Definições", "text": ""},
+        {"subtitle": "2.2. Sistemas de referência", "text": ""},
+        {"subtitle": "2.3. Tangente e influência de principais ângulos da cunha cortante", "text": ""},
+        {"subtitle": "2.4. Outros atributos da cunha cortante", "text": ""}
+      ]
+    },
+    {
+      "id": "c3",
+      "title": "3. Formação de Cavacos",
+      "sections": [
+        {"subtitle": "3.1. Mecanismo de formação", "text": ""},
+        {"subtitle": "3.2. Tipos de cavaco", "text": ""},
+        {"subtitle": "3.3. Aresta postiça de corte (BUE)", "text": ""},
+        {"subtitle": "3.4. Modelos e parâmetros do cisalhamento", "text": ""}
+      ]
+    },
+    {
+      "id": "c4",
+      "title": "4. Força e Potência de Usinagem",
+      "sections": [
+        {"subtitle": "4.1. Forças fundamentais (Fc, Ff, Fp)", "text": ""},
+        {"subtitle": "4.2. Medição de forças e instrumentação", "text": ""},
+        {"subtitle": "4.3. Equações empíricas (ex.: Kienzle)", "text": ""},
+        {"subtitle": "4.4. Cálculo de potência e rendimento", "text": ""}
+      ]
+    },
+    {
+      "id": "c5",
+      "title": "5. Temperatura no Processo de Usinagem",
+      "sections": [
+        {"subtitle": "5.1. Geração e distribuição de calor", "text": ""},
+        {"subtitle": "5.2. Medição de temperaturas", "text": ""},
+        {"subtitle": "5.3. Efeito da temperatura na ferramenta e peça", "text": ""}
+      ]
+    },
+    {
+      "id": "c6",
+      "title": "6. Fluidos de Corte",
+      "sections": [
+        {"subtitle": "6.1. Funções dos fluidos (refrigeração, lubrificação)", "text": ""},
+        {"subtitle": "6.2. Tipos: óleos integrais, emulsões, sintéticos, MQL", "text": ""},
+        {"subtitle": "6.3. Diretrizes de aplicação e segurança", "text": ""}
+      ]
+    },
+    {
+      "id": "c7",
+      "title": "7. Materiais para Ferramentas de Corte",
+      "sections": [
+        {"subtitle": "7.1. Requisitos (dureza a quente, tenacidade)", "text": ""},
+        {"subtitle": "7.2. Aço rápido (HSS)", "text": ""},
+        {"subtitle": "7.3. Metal duro (carbonetos)", "text": ""},
+        {"subtitle": "7.4. Cerâmicas, CBN, PCD", "text": ""},
+        {"subtitle": "7.5. Revestimentos e tratamentos", "text": ""}
+      ]
+    },
+    {
+      "id": "c8",
+      "title": "8. Materiais Usináveis (Peça) e Classificação",
+      "sections": [
+        {"subtitle": "8.1. Aços e ligas", "text": ""},
+        {"subtitle": "8.2. Ferros fundidos e não ferrosos", "text": ""},
+        {"subtitle": "8.3. Superligas e materiais difíceis", "text": ""},
+        {"subtitle": "8.4. Critérios de usinabilidade", "text": ""}
+      ]
+    },
+    {
+      "id": "c9",
+      "title": "9. Desgastes, Falhas e Mecanismos de Degradação da Ferramenta",
+      "sections": [
+        {"subtitle": "9.1. Principais mecanismos de desgaste (adesão, abrasão, difusão)", "text": ""},
+        {"subtitle": "9.2. Cratera, flanco e fraturas", "text": ""},
+        {"subtitle": "9.3. Critérios de fim de vida e medição de VB", "text": ""}
+      ]
+    },
+    {
+      "id": "c10",
+      "title": "10. Integridade e Acabamento Superficial",
+      "sections": [
+        {"subtitle": "10.1. Rugosidade teórica vs real", "text": ""},
+        {"subtitle": "10.2. Tensões residuais e integridade superficial", "text": ""},
+        {"subtitle": "10.3. Camada alterada e tratamentos pós-usinagem", "text": ""}
+      ]
+    },
+    {
+      "id": "c11",
+      "title": "11. Condições Econômicas de Corte",
+      "sections": [
+        {"subtitle": "11.1. Custo de máquina, ferramenta e ciclo", "text": ""},
+        {"subtitle": "11.2. Intervalo de máxima eficiência (vc min / vc max)", "text": ""},
+        {"subtitle": "11.3. Otimização econômica (ex.: Taylor)", "text": ""}
+      ]
+    },
+    {
+      "id": "c12",
+      "title": "12. Usinagem por Abrasão",
+      "sections": [
+        {"subtitle": "12.1. Fundamentos do processo abrasivo", "text": ""},
+        {"subtitle": "12.2. Ferramentas abrasivas e parâmetros", "text": ""},
+        {"subtitle": "12.3. Aplicações e limitações", "text": ""}
+      ]
+    },
+    {
+      "id": "c13",
+      "title": "13. Aspectos Tecnológicos e Recomendações",
+      "sections": [
+        {"subtitle": "13.1. Boas práticas e recomendações operacionais", "text": ""},
+        {"subtitle": "13.2. Seleção de parâmetros e ferramentas", "text": ""},
+        {"subtitle": "13.3. Segurança, meio ambiente e manutenção", "text": ""}
+      ]
+    }
+  ]
+}
